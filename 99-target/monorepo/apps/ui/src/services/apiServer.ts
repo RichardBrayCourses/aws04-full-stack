@@ -1,9 +1,7 @@
-const apiServerUrl = import.meta.env.VITE_API_SERVER_LOCAL;
-
-export const getApiServerUrl = () => apiServerUrl;
+import { config } from "../config";
 
 export const checkApiServerHealth = async () => {
-  const response = await fetch(`${apiServerUrl}/health`);
+  const response = await fetch(`${config.apiBaseUrl}/health`);
 
   if (!response.ok) {
     return false;
