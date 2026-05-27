@@ -9,7 +9,8 @@ const Footer = () => {
   useEffect(() => {
     const checkServices = async () => {
       try {
-        setApiServerIsHealthy(await checkApiServerHealth());
+        const isHealthy = await checkApiServerHealth();
+        setApiServerIsHealthy(isHealthy);
       } catch {
         setApiServerIsHealthy(false);
       }
