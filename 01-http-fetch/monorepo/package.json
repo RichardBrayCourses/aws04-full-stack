@@ -16,7 +16,7 @@
     "ui:upload": "bash scripts/upload-ui.sh",
     "invalidate-cloudfront": "bash scripts/invalidate-cloudfront.sh",
     "deploy-website": "pnpm run ui:build && pnpm run ui:upload && pnpm run invalidate-cloudfront",
-    "deploy-everything": "pnpm run cdk:deploy:cloudfront && pnpm run cdk:deploy:api && pnpm run deploy-website",
+    "deploy-everything": "pnpm run cdk:deploy:cloudfront && pnpm run deploy-website",
     "type-check": "pnpm -r type-check ",
     "package-cleanup": "pnpm -r package-cleanup && rm -rf node_modules "
   },
