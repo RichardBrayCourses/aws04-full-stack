@@ -1,11 +1,8 @@
 import { CfnOutput, Duration, Stack, type StackProps } from "aws-cdk-lib";
-import {
-  Cors,
-  LambdaIntegration,
-  RestApi,
-} from "aws-cdk-lib/aws-apigateway";
+import { Cors, LambdaIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import type { Construct } from "constructs";
 import { join } from "node:path";
 
@@ -14,7 +11,16 @@ export class ApiStack extends Stack {
     super(scope, id, props);
 
     const apiFunction = new NodejsFunction(this, "ApiFunction", {
-      entry: join(__dirname, "..", "..", "..", "services", "api", "src", "index.ts"),
+      entry: join(
+        __dirname,
+        "..",
+        "..",
+        "..",
+        "services",
+        "api",
+        "src",
+        "index.ts",
+      ),
       handler: "handler",
       runtime: Runtime.NODEJS_24_X,
       timeout: Duration.seconds(10),
@@ -38,6 +44,11 @@ export class ApiStack extends Stack {
     api.root.addProxy({
       anyMethod: true,
       defaultIntegration: integration,
+    });
+
+    new StringParameter(this, "ApiBaseUrlParameter", {
+      parameterName: "/services/api/base-url",
+      stringValue: api.url,
     });
 
     new CfnOutput(this, "ApiGatewayUrl", {
