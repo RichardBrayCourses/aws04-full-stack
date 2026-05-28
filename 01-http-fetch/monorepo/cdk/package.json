@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "cdk:deploy:cloudfront": "cdk deploy cloudfront-website --require-approval never --app 'tsx ./src/bin/cloudfront.ts'",
-    "cdk:destroy:cloudfront": "cdk destroy cloudfront-website --force --require-approval never --app 'tsx ./src/bin/cloudfront.ts'",
-    "cdk:deploy:api": "cdk deploy api-service --require-approval never --app 'tsx ./src/bin/api.ts'",
-    "cdk:destroy:api": "cdk destroy api-service --force --require-approval never --app 'tsx ./src/bin/api.ts'",
+    "cdk:deploy:cloudfront": "cdk deploy cloudfront-website --require-approval never --app \"tsx ./src/bin/cloudfront.ts\"",
+    "cdk:destroy:cloudfront": "cdk destroy cloudfront-website --force --require-approval never --app \"tsx ./src/bin/cloudfront.ts\"",
+    "cdk:deploy:api": "cdk deploy api-service --require-approval never --app \"tsx ./src/bin/api.ts\"",
+    "cdk:destroy:api": "cdk destroy api-service --force --require-approval never --app \"tsx ./src/bin/api.ts\"",
     "type-check": "tsc --noEmit",
     "package-cleanup": "rm -rf node_modules cdk.out"
   },

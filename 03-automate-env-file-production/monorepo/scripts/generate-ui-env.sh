@@ -10,7 +10,7 @@ echo ""
 echo "Reading deployment parameters from SSM Parameter Store..."
 echo ""
 
-API_BASE_URL=$(aws ssm get-parameter \
+API_BASE_URL=$(MSYS_NO_PATHCONV=1 aws ssm get-parameter \
   --name "$API_BASE_URL_PARAMETER" \
   --query "Parameter.Value" \
   --output text)
