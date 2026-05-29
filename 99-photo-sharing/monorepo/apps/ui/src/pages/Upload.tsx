@@ -22,8 +22,8 @@ const Upload = () => {
     setError("");
 
     try {
-      const photoName = await uploadPhoto(selectedFile);
-      setMessage(`Uploaded as ${photoName}`);
+      await uploadPhoto(selectedFile);
+      setMessage("Uploaded photo");
       setSelectedFile(null);
 
       if (fileInputRef.current) {

@@ -98,19 +98,17 @@ app.post("/photos/presigned-url", async (req: Request, res: Response) => {
         ? req.body.contentType
         : "image/jpeg";
 
-    const photoName = randomUUID();
-
     const uploadUrl = await getSignedUrl(
       s3Client,
       new PutObjectCommand({
         Bucket: bucketName,
-        Key: photoName,
+        Key: randomUUID(),
         ContentType: contentType,
       }),
       { expiresIn: 900 },
     );
 
-    res.json({ uploadUrl, photoName });
+    res.type("text/plain").send(uploadUrl);
   } catch {
     res.status(500).json({ error: "Could not create upload URL" });
   }

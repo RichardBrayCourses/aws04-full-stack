@@ -25,12 +25,12 @@ const getPhotoUploadUrl = async (contentType: string) => {
     throw new Error("Could not start the upload");
   }
 
-  return response.json() as Promise<{ uploadUrl: string; photoName: string }>;
+  return response.text();
 };
 
 export const uploadPhoto = async (file: File) => {
   const contentType = file.type || "image/jpeg";
-  const { uploadUrl, photoName } = await getPhotoUploadUrl(contentType);
+  const uploadUrl = await getPhotoUploadUrl(contentType);
 
   const response = await fetch(uploadUrl, {
     method: "PUT",
@@ -44,7 +44,7 @@ export const uploadPhoto = async (file: File) => {
     throw new Error("Could not upload the photo");
   }
 
-  return photoName;
+  return;
 };
 
 export const listPhotos = async () => {
