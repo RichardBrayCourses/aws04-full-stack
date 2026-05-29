@@ -41,42 +41,34 @@ app.get("/photos", async (_req: Request, res: Response) => {
       return;
     }
 
+    const response = await s3Client.send(
+      new ListObjectsV2Command({ Bucket: bucketName }),
+    );
+
     const photos = [];
-    let continuationToken: string | undefined;
 
-    do {
-      const response = await s3Client.send(
-        new ListObjectsV2Command({
-          Bucket: bucketName,
-          ContinuationToken: continuationToken,
-        }),
-      );
-
-      for (const object of response.Contents ?? []) {
-        if (!object.Key) {
-          continue;
-        }
-
-        const url = await getSignedUrl(
-          s3Client,
-          new GetObjectCommand({
-            Bucket: bucketName,
-            Key: object.Key,
-          }),
-          { expiresIn: 3600 },
-        );
-
-        photos.push({
-          id: object.Key,
-          title: object.Key,
-          description: "",
-          small: url,
-          large: url,
-        });
+    for (const s3File of response.Contents ?? []) {
+      if (!s3File.Key) {
+        continue;
       }
 
-      continuationToken = response.NextContinuationToken;
-    } while (continuationToken);
+      const url = await getSignedUrl(
+        s3Client,
+        new GetObjectCommand({
+          Bucket: bucketName,
+          Key: s3File.Key,
+        }),
+        { expiresIn: 3600 },
+      );
+
+      photos.push({
+        id: s3File.Key,
+        title: s3File.Key,
+        description: "",
+        small: url,
+        large: url,
+      });
+    }
 
     res.json({ photos });
   } catch {
