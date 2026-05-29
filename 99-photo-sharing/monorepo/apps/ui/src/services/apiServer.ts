@@ -12,13 +12,9 @@ export const checkApiServerHealth = async () => {
   return body.trim() === "Healthy!";
 };
 
-const getPhotoUploadUrl = async (contentType: string) => {
+const getPhotoUploadUrl = async () => {
   const response = await fetch(`${config.apiBaseUrl}/photos/presigned-url`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ contentType }),
   });
 
   if (!response.ok) {
@@ -29,13 +25,12 @@ const getPhotoUploadUrl = async (contentType: string) => {
 };
 
 export const uploadPhoto = async (file: File) => {
-  const contentType = file.type || "image/jpeg";
-  const uploadUrl = await getPhotoUploadUrl(contentType);
+  const uploadUrl = await getPhotoUploadUrl();
 
   const response = await fetch(uploadUrl, {
     method: "PUT",
     headers: {
-      "Content-Type": contentType,
+      "Content-Type": "image/jpeg",
     },
     body: file,
   });

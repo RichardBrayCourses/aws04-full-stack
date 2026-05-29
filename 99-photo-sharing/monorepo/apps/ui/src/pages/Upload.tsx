@@ -50,7 +50,7 @@ const Upload = () => {
           <Input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/jpeg"
             disabled={isUploading}
             onChange={(event) => {
               setSelectedFile(event.target.files?.[0] ?? null);

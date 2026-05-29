@@ -13,18 +13,8 @@ export const app = express();
 
 const s3Client = new S3Client();
 
-app.use(express.json());
-
-app.use((req: Request, res: Response, next) => {
+app.use((_req: Request, res: Response, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    res.sendStatus(204);
-    return;
-  }
-
   next();
 });
 
@@ -76,7 +66,7 @@ app.get("/photos", async (_req: Request, res: Response) => {
   }
 });
 
-app.post("/photos/presigned-url", async (req: Request, res: Response) => {
+app.post("/photos/presigned-url", async (_req: Request, res: Response) => {
   try {
     const bucketName = process.env.IMAGES_BUCKET_NAME;
 
@@ -85,17 +75,12 @@ app.post("/photos/presigned-url", async (req: Request, res: Response) => {
       return;
     }
 
-    const contentType =
-      typeof req.body?.contentType === "string" && req.body.contentType
-        ? req.body.contentType
-        : "image/jpeg";
-
     const uploadUrl = await getSignedUrl(
       s3Client,
       new PutObjectCommand({
         Bucket: bucketName,
         Key: randomUUID(),
-        ContentType: contentType,
+        ContentType: "image/jpeg",
       }),
       { expiresIn: 900 },
     );
