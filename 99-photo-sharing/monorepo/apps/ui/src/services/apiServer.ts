@@ -1,4 +1,5 @@
 import { config } from "../config";
+import { PhotoData } from "@/data/photos";
 
 export const checkApiServerHealth = async () => {
   const response = await fetch(`${config.apiBaseUrl}/health`);
@@ -44,4 +45,15 @@ export const uploadPhoto = async (file: File) => {
   }
 
   return photoName;
+};
+
+export const listPhotos = async () => {
+  const response = await fetch(`${config.apiBaseUrl}/photos`);
+
+  if (!response.ok) {
+    return [];
+  }
+
+  const body = (await response.json()) as { photos: PhotoData[] };
+  return body.photos;
 };

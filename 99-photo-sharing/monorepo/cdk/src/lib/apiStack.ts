@@ -53,6 +53,7 @@ export class ApiStack extends Stack {
       },
     });
 
+    photosBucket.grantRead(apiFunction);
     photosBucket.grantPut(apiFunction);
 
     const api = new RestApi(this, "ApiGateway", {
