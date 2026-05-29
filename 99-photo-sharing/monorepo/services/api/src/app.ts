@@ -1,6 +1,7 @@
 import express from "express";
 import type { Request, Response } from "express";
 import {
+  DeleteObjectsCommand,
   GetObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
@@ -63,6 +64,38 @@ app.get("/photos", async (_req: Request, res: Response) => {
     res.json({ photos });
   } catch {
     res.status(500).json({ error: "Could not list photos" });
+  }
+});
+
+app.delete("/photos", async (_req: Request, res: Response) => {
+  try {
+    const bucketName = process.env.IMAGES_BUCKET_NAME;
+
+    if (!bucketName) {
+      res.status(500).json({ error: "IMAGES_BUCKET_NAME is not configured" });
+      return;
+    }
+
+    const response = await s3Client.send(
+      new ListObjectsV2Command({ Bucket: bucketName }),
+    );
+
+    const photosToDelete = (response.Contents ?? []).flatMap((s3File) =>
+      s3File.Key ? [{ Key: s3File.Key }] : [],
+    );
+
+    if (photosToDelete.length > 0) {
+      await s3Client.send(
+        new DeleteObjectsCommand({
+          Bucket: bucketName,
+          Delete: { Objects: photosToDelete },
+        }),
+      );
+    }
+
+    res.json({ deleted: photosToDelete.length });
+  } catch {
+    res.status(500).json({ error: "Could not delete photos" });
   }
 });
 

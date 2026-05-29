@@ -55,6 +55,7 @@ export class ApiStack extends Stack {
 
     photosBucket.grantRead(apiFunction);
     photosBucket.grantPut(apiFunction);
+    photosBucket.grantDelete(apiFunction);
 
     const api = new RestApi(this, "ApiGateway", {
       restApiName: "api-service",
