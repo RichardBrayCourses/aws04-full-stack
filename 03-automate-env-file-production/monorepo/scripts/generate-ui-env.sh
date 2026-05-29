@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+# Note on MSYS_NO_PATHCONV=1
+# In Git Bash on Windows, this disables automatic path conversion so CLI
+# arguments such as SSM parameter paths and CloudFront paths are passed through unchanged.
+
 API_BASE_URL_PARAMETER="/services/api/base-url"
 
 OUTPUT_FILE="apps/ui/.env"
