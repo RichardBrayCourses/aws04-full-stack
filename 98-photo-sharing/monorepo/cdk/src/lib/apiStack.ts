@@ -1,7 +1,18 @@
-import { CfnOutput, Duration, Stack, type StackProps } from "aws-cdk-lib";
+import {
+  CfnOutput,
+  Duration,
+  RemovalPolicy,
+  Stack,
+  type StackProps,
+} from "aws-cdk-lib";
 import { Cors, LambdaIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import {
+  BlockPublicAccess,
+  Bucket,
+  HttpMethods,
+} from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 import type { Construct } from "constructs";
 import { join } from "node:path";
@@ -9,6 +20,19 @@ import { join } from "node:path";
 export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
+
+    const photosBucket = new Bucket(this, "PhotosBucket", {
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+      cors: [
+        {
+          allowedMethods: [HttpMethods.PUT],
+          allowedOrigins: ["*"],
+          allowedHeaders: ["*"],
+        },
+      ],
+    });
 
     const apiFunction = new NodejsFunction(this, "ApiFunction", {
       entry: join(
@@ -24,7 +48,14 @@ export class ApiStack extends Stack {
       handler: "handler",
       runtime: Runtime.NODEJS_24_X,
       timeout: Duration.seconds(10),
+      environment: {
+        IMAGES_BUCKET_NAME: photosBucket.bucketName,
+      },
     });
+
+    photosBucket.grantRead(apiFunction);
+    photosBucket.grantPut(apiFunction);
+    photosBucket.grantDelete(apiFunction);
 
     const api = new RestApi(this, "ApiGateway", {
       restApiName: "api-service",

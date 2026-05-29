@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import Upload from "./pages/Upload";
 import ThemeProvider, { useTheme } from "./context/ThemeContext";
 import AuthProvider from "./context/AuthContext";
 
@@ -16,6 +17,7 @@ const AppContent = () => {
       <main className="flex-1 overflow-auto">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/upload" element={<Upload />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

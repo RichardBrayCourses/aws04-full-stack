@@ -22,6 +22,9 @@ const Header = () => {
         <Link to="/">Home</Link>
       </Button>
       <Button className="m-1" asChild variant="ghost">
+        <Link to="/upload">Upload</Link>
+      </Button>
+      <Button className="m-1" asChild variant="ghost">
         <Link to="/profile">Profile</Link>
       </Button>
       <Button
