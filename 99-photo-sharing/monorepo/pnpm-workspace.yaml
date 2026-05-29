@@ -1,8 +1,0 @@
-packages:
-  - "apps/ui"
-  - "scripts"
-  - "cdk"
-  - "services/api"
-allowBuilds:
-  esbuild: true
-  msw: true
