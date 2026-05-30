@@ -2,7 +2,7 @@ import { config } from "../config";
 import { PhotoData } from "@/data/photos";
 
 export const checkApiServerHealth = async () => {
-  const response = await fetch(`${config.apiBaseUrl}/health`);
+  const response = await fetch(`${config.apiBaseUrl}health`);
 
   if (!response.ok) {
     return false;
