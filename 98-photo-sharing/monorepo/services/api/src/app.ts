@@ -12,8 +12,6 @@ import { randomUUID } from "node:crypto";
 
 export const app = express();
 
-const s3Client = new S3Client();
-
 app.use((_req: Request, res: Response, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
@@ -25,6 +23,8 @@ app.get("/health", (_req: Request, res: Response) => {
 
 app.get("/photos", async (_req: Request, res: Response) => {
   try {
+    const s3Client = new S3Client();
+
     const bucketName = process.env.IMAGES_BUCKET_NAME;
 
     if (!bucketName) {
@@ -135,6 +135,8 @@ try {
 
 app.delete("/photos", async (_req: Request, res: Response) => {
   try {
+    const s3Client = new S3Client();
+
     const bucketName = process.env.IMAGES_BUCKET_NAME;
 
     if (!bucketName) {
@@ -167,6 +169,8 @@ app.delete("/photos", async (_req: Request, res: Response) => {
 
 app.post("/photos/presigned-url", async (_req: Request, res: Response) => {
   try {
+    const s3Client = new S3Client();
+
     const bucketName = process.env.IMAGES_BUCKET_NAME;
 
     if (!bucketName) {
