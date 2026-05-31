@@ -50,7 +50,16 @@ const Home = () => {
   const [bucketPhotos, setBucketPhotos] = useState<PhotoData[] | null>(null);
 
   useEffect(() => {
-    listPhotos().then(setBucketPhotos).catch(() => setBucketPhotos([]));
+    const loadPhotos = async () => {
+      try {
+        const photos = await listPhotos();
+        setBucketPhotos(photos);
+      } catch {
+        setBucketPhotos([]);
+      }
+    };
+
+    loadPhotos();
   }, []);
 
   if (bucketPhotos === null) {
