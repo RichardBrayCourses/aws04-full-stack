@@ -12,7 +12,7 @@ export const checkApiServerHealth = async () => {
 };
 
 const getPhotoUploadUrl = async () => {
-  const response = await fetch(`${config.apiBaseUrl}/photos/presigned-url`, {
+  const response = await fetch(`${config.apiBaseUrl}photos/presigned-url`, {
     method: "POST",
   });
 
