@@ -42,6 +42,10 @@ export const uploadPhoto = async (file: File) => {
   return;
 };
 
+type ListPhotosResponse = {
+  bucketPhotos: PhotoData[];
+};
+
 export const listPhotos = async () => {
   const response = await fetch(`${config.apiBaseUrl}/photos`);
 
@@ -49,6 +53,7 @@ export const listPhotos = async () => {
     return [];
   }
 
-  const body = (await response.json()) as { photos: PhotoData[] };
-  return body.photos;
+  const listPhotosResponse = (await response.json()) as ListPhotosResponse;
+
+  return listPhotosResponse.bucketPhotos;
 };

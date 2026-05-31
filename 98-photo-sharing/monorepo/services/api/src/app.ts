@@ -36,7 +36,7 @@ app.get("/photos", async (_req: Request, res: Response) => {
       new ListObjectsV2Command({ Bucket: bucketName }),
     );
 
-    const photos = [];
+    const bucketPhotos = [];
 
     for (const s3File of response.Contents ?? []) {
       if (!s3File.Key) {
@@ -52,7 +52,7 @@ app.get("/photos", async (_req: Request, res: Response) => {
         { expiresIn: 3600 },
       );
 
-      photos.push({
+      bucketPhotos.push({
         id: s3File.Key,
         title: s3File.Key,
         description: "",
@@ -61,7 +61,7 @@ app.get("/photos", async (_req: Request, res: Response) => {
       });
     }
 
-    res.json({ photos });
+    res.json({ bucketPhotos });
   } catch {
     res.status(500).json({ error: "Could not list photos" });
   }
